@@ -1,0 +1,42 @@
+# Uruchom testy metody z pktu 2 z różnymi rozmiarami danych wejściowych
+# oraz różną liczbą procesów, następnie przedstaw zebrane wyniki
+# w postaci graficznej z użyciem matplotlib.
+
+import random
+import time
+import matplotlib.pyplot as plt
+from multiprocessing import cpu_count
+
+# Zakładamy, że funkcja jest w pliku
+from drugie import parallel_merge_sort  # Import funkcji parallel_merge_sort z
+
+if __name__ == "__main__":
+    sizes = [100, 1000, 10000, 50000]  # Rozmiary danych wejściowych
+    process_counts = [1, 2, 4, 8]      # Liczba procesów
+
+    results = {}
+
+    for size in sizes:
+        data = [random.randint(1, 1000) for _ in range(size)]  # Generowanie losowych danych
+        results[size] = {}
+
+        for processes in process_counts:
+            start_time = time.time()
+            sorted_data = parallel_merge_sort(data, num_processes=processes)
+            end_time = time.time()
+
+            results[size][processes] = end_time - start_time
+
+    # Generowanie wykresu
+    plt.figure(figsize=(12, 8))
+
+    for size in sizes:
+        times = [results[size][p] for p in process_counts]
+        plt.plot(process_counts, times, marker='o', label=f"Rozmiar: {size}")
+
+    plt.title("Czas sortowania równoległego w zależności od liczby procesów i rozmiaru danych")
+    plt.xlabel("Liczba procesów")
+    plt.ylabel("Czas wykonania (s)")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
