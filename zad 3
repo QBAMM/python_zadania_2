@@ -7,7 +7,7 @@ import time
 import matplotlib.pyplot as plt
 from multiprocessing import cpu_count
 
-# Zakładamy, że funkcja jest w pliku
+
 from drugie import parallel_merge_sort  # Import funkcji parallel_merge_sort z
 
 if __name__ == "__main__":
