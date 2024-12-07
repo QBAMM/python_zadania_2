@@ -1,0 +1,55 @@
+# Stwórz klasę implementującą liczby zespolone
+# oraz przeciąż dla niej operatory dodawania i odejmowania
+
+class ComplexNumber:
+    def __init__(self, real, imaginary):
+        """
+        Inicjalizuje liczbę zespoloną.
+        :param real: Część rzeczywista.
+        :param imaginary: Część urojona.
+        """
+        self.real = real
+        self.imaginary = imaginary
+
+    def __add__(self, other):
+        """
+        Przeciążenie operatora dodawania (+).
+        :param other: Inna liczba zespolona.
+        :return: Nowa liczba zespolona będąca sumą.
+        """
+        if isinstance(other, ComplexNumber):
+            return ComplexNumber(self.real + other.real, self.imaginary + other.imaginary)
+        raise TypeError("Dodawanie obsługiwane tylko dla obiektów ComplexNumber")
+
+    def __sub__(self, other):
+        """
+        Przeciążenie operatora odejmowania (-).
+        :param other: Inna liczba zespolona.
+        :return: Nowa liczba zespolona będąca różnicą.
+        """
+        if isinstance(other, ComplexNumber):
+            return ComplexNumber(self.real - other.real, self.imaginary - other.imaginary)
+        raise TypeError("Odejmowanie obsługiwane tylko dla obiektów ComplexNumber")
+
+    def __str__(self):
+        """
+        Reprezentacja liczby zespolonej jako ciąg znaków.
+        """
+        if self.imaginary >= 0:
+            return f"{self.real} + {self.imaginary}i"
+        return f"{self.real} - {-self.imaginary}i"
+
+
+# Przykład użycia
+if __name__ == "__main__":
+    # Tworzenie liczb zespolonych
+    z1 = ComplexNumber(3, 4)
+    z2 = ComplexNumber(1, -2)
+
+    # Dodawanie liczb zespolonych
+    z3 = z1 + z2
+    print(f"({z1}) + ({z2}) = {z3}")
+
+    # Odejmowanie liczb zespolonych
+    z4 = z1 - z2
+    print(f"({z1}) - ({z2}) = {z4}")
