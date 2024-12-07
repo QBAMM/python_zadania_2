@@ -1,0 +1,45 @@
+# Zaimplementuj własny iterator o nazwie fibonacci,
+# zwracający kolejne liczby ciągu Fibonacciego.
+# Funkcja __init__ powinna posiadać parametr o nazwie steps
+# określający liczbę wyrazów ciągu,
+# po których funkcja  __next__  rzuca wyjątek StopIteration
+
+class Fibonacci:
+    def __init__(self, steps):
+        """
+        Inicjalizuje iterator ciągu Fibonacciego.
+
+        :param steps: Liczba wyrazów ciągu do wygenerowania.
+        """
+        self.steps = steps
+        self.current_step = 0
+        self.a, self.b = 0, 1  # Pierwsze dwa wyrazy ciągu Fibonacciego
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current_step >= self.steps:
+            raise StopIteration
+
+        # Zwróć aktualny wyraz ciągu i przejdź do następnego
+        if self.current_step == 0:
+            self.current_step += 1
+            return self.a
+
+        self.a, self.b = self.b, self.a + self.b
+        self.current_step += 1
+        return self.a
+
+# Pobierz liczbę wyrazów od użytkownika
+try:
+    steps = int(input("Podaj liczbę wyrazów ciągu Fibonacciego: "))
+    if steps <= 0:
+        print("Liczba wyrazów musi być większa od zera.")
+    else:
+        # Stwórz iterator i wypisz wyrazy ciągu
+        fibonacci_iterator = Fibonacci(steps)
+        for number in fibonacci_iterator:
+            print(number)
+except ValueError:
+    print("Proszę podać poprawną liczbę całkowitą.")
