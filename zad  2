@@ -1,0 +1,70 @@
+# Napisz równoległą metodę sortowania
+# z wykorzystaniem pakietu multiprocessing
+
+import multiprocessing
+import random
+
+def merge_sort_parallel(data):
+    """
+    Sortuje listę równolegle przy użyciu algorytmu merge sort.
+    :param data: Lista do posortowania.
+    :return: Posortowana lista.
+    """
+    if len(data) <= 1:
+        return data
+
+    # Podział na dwie połowy
+    mid = len(data) // 2
+    left = data[:mid]
+    right = data[mid:]
+
+    # Sortowanie równolegle dwóch połówek
+    left_sorted = merge_sort_parallel(left)
+    right_sorted = merge_sort_parallel(right)
+
+    # Scalanie posortowanych połówek
+    return merge(left_sorted, right_sorted)
+
+def merge(left, right):
+    """
+    Scalanie dwóch posortowanych list w jedną posortowaną listę.
+    :param left: Pierwsza posortowana lista.
+    :param right: Druga posortowana lista.
+    :return: Posortowana lista wynikowa.
+    """
+    sorted_list = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            sorted_list.append(left[i])
+            i += 1
+        else:
+            sorted_list.append(right[j])
+            j += 1
+
+    # Dodanie pozostałych elementów
+    sorted_list.extend(left[i:])
+    sorted_list.extend(right[j:])
+    return sorted_list
+
+def parallel_merge_sort(data):
+    """
+    Funkcja, która uruchamia merge sort równolegle w sposób bezpieczny dla systemu Windows.
+    :param data: Lista do posortowania.
+    :return: Posortowana lista.
+    """
+    with multiprocessing.Pool() as pool:
+        sorted_data = pool.apply(merge_sort_parallel, (data,))
+        return sorted_data
+
+if __name__ == "__main__":
+    # Generowanie losowych danych
+    N = 100
+    data = [random.randint(1, 1000) for _ in range(N)]
+    print("Nieposortowane dane:", data)
+
+    # Sortowanie danych równolegle
+    sorted_data = parallel_merge_sort(data)
+
+    print("Posortowane dane:", sorted_data)
